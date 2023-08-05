@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 )
 
 const randomStringSource = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_+"
@@ -331,4 +332,30 @@ func (t *Tools) PushJSONToRemote(uri string, data interface{}, client ...*http.C
 
 	// send response back
 	return response, response.StatusCode, nil
+}
+
+// TimeLeave aggiunge 7h12m e 7h42m alla data di input e ritorna i risultati come stringhe
+func (t *Tools) TimeLeave(hours, minutes int) (string, string) {
+	t1 := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), hours, minutes, 0, 0, time.UTC)
+
+	sPP := t1.Add(time.Hour*7 + time.Minute*12)
+	cPP := t1.Add(time.Hour*7 + time.Minute*42)
+
+	//duration := cPP.Sub(t1)
+	//fmt.Println(duration)
+
+	uscitaSPP := fmt.Sprintf("%.2d:%.2d", sPP.Hour(), sPP.Minute())
+	uscitaPP := fmt.Sprintf("%.2d:%.2d", cPP.Hour(), cPP.Minute())
+	return uscitaSPP, uscitaPP
+}
+
+// TimeDifference calcola la differenza tra le due date in input
+func (t *Tools) TimeDifference(hours, minutes, hours2, minutes2 int) string {
+	t1 := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), hours, minutes, 0, 0, time.UTC)
+	t2 := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), hours2, minutes2, 0, 0, time.UTC)
+
+	duration := t2.Sub(t1)
+	fmt.Println(duration)
+
+	return duration.String()
 }
